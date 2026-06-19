@@ -36,8 +36,9 @@ Telemetry was collected from a Windows Server virtual machine using the Azure Mo
 
 ## Architecture Diagram
 
-![Arch](Screenshots/ArchDiagram.png)
-
+<p align="center">
+  <img src="Screenshots/ArchDiagram.png" alt="Architecture Diagram" width="600">
+</p>
 
 ---
 
@@ -55,7 +56,9 @@ The environment consisted of:
 
 ### Azure Resource Group
 
-![RG](<Screenshots/Resource Group.png>)
+<p align="center">
+  <img src="Screenshots/Resource Group.png" alt="RG" width="1000">
+</p>
 
 ---
 
@@ -65,7 +68,9 @@ A Windows Server VM was deployed to simulate an enterprise endpoint and generate
 
 ### Windows Server VM
 
-![VM](Screenshots/VM.png)
+<p align="center">
+  <img src="Screenshots/VM.png" alt="VM" width="1000">
+</p>
 
 ## Data Collection Rule (DCR)
 
@@ -87,7 +92,9 @@ These security audit logs contained the telemetry used throughout the project, i
 | 4672 | Privileged Logon |
 | 4720 | User Account Creation |
 
-![DCR](<Screenshots/Screenshot 2026-06-18 191045.png>)
+<p align="center">
+  <img src="Screenshots/Screenshot 2026-06-18 191045.png" alt="DCR" width="900">
+</p>
 
 The DCR served as the bridge between the endpoint and Microsoft Sentinel, enabling security event ingestion and detection engineering.
 
@@ -108,7 +115,9 @@ Responsibilities of the Log Analytics Workspace included:
 
 Without the Log Analytics Workspace, Microsoft Sentinel would have no telemetry available for detection engineering or incident generation.
 
-![law](Screenshots/law.png)
+<p align="center">
+  <img src="Screenshots/law.png" alt="LAW" width="1000" length="1000">
+</p>
 
 # Microsoft Sentinel
 
@@ -127,7 +136,10 @@ Unlike the Log Analytics Workspace, which primarily stores data, Sentinel provid
 
 The platform was used to create custom analytics rules, correlate suspicious activity, and generate incidents based on simulated attack scenarios.
 
-![sentinel](Screenshots/Sentinel.png)
+<p align="center">
+  <img src="Screenshots/Sentinel.png" alt="Sentinel" width="1000">
+</p>
+
 ---
 
 ## Log Collection Validation
@@ -145,13 +157,21 @@ Successful telemetry ingestion was validated using heartbeat events and Windows 
 
 ### Heartbeat Validation
 
-![Heartbeat Query Results](images/heartbeat-query.png)
+The Heartbeat table was used to verify successful communication between the Windows Server endpoint, Azure Monitor Agent, and Log Analytics Workspace.
+
+<p align="center">
+  <img src="Screenshots/heartbeat.png" alt="Heartbeat" width="600">
+</p>
 
 ### Security Event Validation
 
-![Security Event Query Results](images/security-events-query.png)
+Windows Security Event Logs were successfully collected and ingested into Log Analytics through the Azure Monitor Agent and Data Collection Rule.
 
----
+The collected telemetry served as the foundation for all Sentinel detections and incident generation.
+
+<p align="center">
+  <img src="Screenshots/security event.png" alt="Security Events" width="600">
+</p>
 
 # Detection Engineering
 
@@ -204,7 +224,9 @@ Instead, this detection provides visibility and context for future investigation
 
 ### Detection Results
 
-![Failed Authentication Query Results](images/failed-auth-query.png)
+<p align="center">
+  <img src="Screenshots/Failed auth burst.png" alt="Failed Authentication Burst" width="600">
+</p>
 
 ---
 
@@ -246,7 +268,9 @@ Instead, this detection serves as supporting telemetry during investigations.
 
 ### Detection Results
 
-![Successful Logon Events](images/successful-logons.png)
+<p align="center">
+  <img src="Screenshots/Succesful Authentication.png" alt="Successful Authentication" width="600">
+</p>
 
 ---
 
@@ -288,7 +312,9 @@ This detection is retained for investigation context and threat hunting.
 
 ### Detection Results
 
-![Event ID 4672 Results](images/eventid-4672-results.png)
+<p align="center">
+  <img src="Screenshots/privlogon.png" alt="Privileged Logon" width="600">
+</p>
 
 ---
 
@@ -330,11 +356,15 @@ This rule was elevated to incident status to provide immediate analyst visibilit
 
 ### Detection Results
 
-![Event ID 4720 Results](images/eventid-4720-results.png)
+<p align="center">
+  <img src="Screenshots/accountcreation.png" alt="Account Creation" width="600">
+</p>
 
 ### Generated Incident
 
-![Unauthorized Local Account Persistence Incident](images/account-persistence-incident.png)
+<p align="center">
+  <img src="Screenshots/incidentaccountcreation.png" alt="Account Creation Incident" width="600">
+</p>
 
 ---
 
@@ -378,9 +408,17 @@ This pattern may indicate:
 
 Because multiple events are correlated together, confidence is significantly higher than standalone authentication failures.
 
+### Detection Results
+
+<p align="center">
+  <img src="Screenshots/spraysuccess.png" alt="Password Spray Results" width="600">
+</p>
+
 ### Generated Incident
 
-![Password Spray Incident](images/password-spray-incident.png)
+<p align="center">
+  <img src="Screenshots/spraysuccessINC.png" alt="Password Spray Incident" width="600">
+</p>
 
 ---
 
@@ -430,11 +468,15 @@ The resulting incident more closely resembles real-world SOC detection engineeri
 
 ### Correlation Results
 
-![Correlation Query Results](images/correlation-query-results.png)
+<p align="center">
+  <img src="Screenshots/account compromise.png" alt="Correlation Query" width="600">
+</p>
 
 ### Generated Incident
 
-![Potential Account Compromise and Persistence Incident](images/account-compromise-persistence-incident.png)
+<p align="center">
+  <img src="Screenshots/account compromise INC.png" alt="Account Compromise Incident" width="600">
+</p>
 
 ---
 # Alert Tuning and Incident Prioritization
@@ -458,41 +500,6 @@ The following detections were promoted to incidents:
 These detections represent higher-confidence indicators of malicious activity because they either indicate persistence or correlate multiple suspicious events together.
 
 This approach reflects real-world SOC practices where analyst attention is reserved for high-value security events.
-
----
-
-# Attack Simulation
-
-The following attack chain was simulated to validate detections and incident generation.
-
-```text
-Failed Authentication Attempts (4625)
-                ↓
-Successful Authentication (4624)
-                ↓
-Local Account Creation (4720)
-                ↓
-High Severity Incident
-```
-
-The attack chain demonstrates a potential progression from credential access to persistence.
-
-### Investigation Timeline
-
-![Attack Chain Investigation](images/attack-chain-investigation.png)
-
----
-
-# MITRE ATT&CK Mapping
-
-| Detection | ATT&CK Technique |
-|------------|-----------------|
-| Failed Authentication Burst | T1110 |
-| Successful Authentication Activity | T1078 |
-| Privileged Logon Detected | T1078 |
-| Unauthorized Local Account Persistence Detection | T1136 |
-| Potential Password Spray Success | T1110.003 |
-| Potential Account Compromise and Persistence | T1110.003, T1078, T1136 |
 
 ---
 
