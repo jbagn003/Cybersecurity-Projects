@@ -69,7 +69,7 @@ A Windows Server VM was deployed to simulate an enterprise endpoint and generate
 ### Windows Server VM
 
 <p align="center">
-  <img src="Screenshots/VM.png" alt="VM" width="1000">
+  <img src="Screenshots/VM.png" alt="VM" width="100%">
 </p>
 
 ## Data Collection Rule (DCR)
@@ -135,7 +135,7 @@ Unlike the Log Analytics Workspace, which primarily stores data, Sentinel provid
 The platform was used to create custom analytics rules, correlate suspicious activity, and generate incidents based on simulated attack scenarios.
 
 <p align="center">
-  <img src="Screenshots/Sentinel.png" alt="Sentinel" width="1000">
+  <img src="Screenshots/Sentinel.png" alt="Sentinel" width="100%">
 </p>
 
 ---
@@ -158,7 +158,7 @@ Successful telemetry ingestion was validated using heartbeat events and Windows 
 The Heartbeat table was used to verify successful communication between the Windows Server endpoint, Azure Monitor Agent, and Log Analytics Workspace.
 
 <p align="center">
-  <img src="Screenshots/heartbeat.png" alt="Heartbeat" width="600">
+  <img src="Screenshots/heartbeat.png" alt="Heartbeat" width="100%">
 </p>
 
 ### Security Event Validation
@@ -168,7 +168,7 @@ Windows Security Event Logs were successfully collected and ingested into Log An
 The collected telemetry served as the foundation for all Sentinel detections and incident generation.
 
 <p align="center">
-  <img src="Screenshots/security event.png" alt="Security Events" width="600">
+  <img src="Screenshots/security event.png" alt="Security Events" width="100%">
 </p>
 
 # Detection Engineering
@@ -223,7 +223,7 @@ Instead, this detection provides visibility and context for future investigation
 ### Detection Results
 
 <p align="center">
-  <img src="Screenshots/Failed auth burst.png" alt="Failed Authentication Burst" width="600">
+  <img src="Screenshots/Failed auth burst.png" alt="Failed Authentication Burst" width="1000">
 </p>
 
 ---
@@ -267,7 +267,7 @@ Instead, this detection serves as supporting telemetry during investigations.
 ### Detection Results
 
 <p align="center">
-  <img src="Screenshots/Succesful Authentication.png" alt="Successful Authentication" width="600">
+  <img src="Screenshots/Succesful Authentication.png" alt="Successful Authentication" width="1000">
 </p>
 
 ---
@@ -311,7 +311,7 @@ This detection is retained for investigation context and threat hunting.
 ### Detection Results
 
 <p align="center">
-  <img src="Screenshots/privlogon.png" alt="Privileged Logon" width="600">
+  <img src="Screenshots/privlogon.png" alt="Privileged Logon" width="1000">
 </p>
 
 ---
@@ -355,13 +355,13 @@ This rule was elevated to incident status to provide immediate analyst visibilit
 ### Detection Results
 
 <p align="center">
-  <img src="Screenshots/accountcreation.png" alt="Account Creation" width="600">
+  <img src="Screenshots/accountcreation.png" alt="Account Creation" width="1000">
 </p>
 
 ### Generated Incident
 
 <p align="center">
-  <img src="Screenshots/incidentaccountcreation.png" alt="Account Creation Incident" width="600">
+  <img src="Screenshots/incidentaccountcreation.png" alt="Account Creation Incident" width="1000">
 </p>
 
 ---
@@ -409,13 +409,13 @@ Because multiple events are correlated together, confidence is significantly hig
 ### Detection Results
 
 <p align="center">
-  <img src="Screenshots/spraysuccess.png" alt="Password Spray Results" width="600">
+  <img src="Screenshots/spraysuccess.png" alt="Password Spray Results" width="1000">
 </p>
 
 ### Generated Incident
 
 <p align="center">
-  <img src="Screenshots/spraysuccessINC.png" alt="Password Spray Incident" width="600">
+  <img src="Screenshots/spraysuccessINC.png" alt="Password Spray Incident" width="1000">
 </p>
 
 ---
@@ -467,13 +467,13 @@ The resulting incident more closely resembles real-world SOC detection engineeri
 ### Correlation Results
 
 <p align="center">
-  <img src="Screenshots/account compromise.png" alt="Correlation Query" width="600">
+  <img src="Screenshots/account compromise.png" alt="Correlation Query" width="1000">
 </p>
 
 ### Generated Incident
 
 <p align="center">
-  <img src="Screenshots/account compromise INC.png" alt="Account Compromise Incident" width="600">
+  <img src="Screenshots/account compromise INC.png" alt="Account Compromise Incident" width="1000">
 </p>
 
 ---
