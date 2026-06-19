@@ -2,400 +2,526 @@
 
 ## Overview
 
-This project demonstrates the deployment of a cloud-native Security Operations Center (SOC) using Microsoft Sentinel, Azure Monitor Agent (AMA), and a Windows Server endpoint. The objective was to simulate common attack techniques, engineer custom detections, tune alerts to reduce analyst fatigue, and generate high-confidence incidents through event correlation.
+This project demonstrates the deployment of a cloud-based Security Operations Center (SOC) environment using Microsoft Sentinel, Azure Monitor, Log Analytics, and a Windows Server endpoint.
 
-Unlike many introductory SIEM projects that generate incidents for every detection, this lab focuses on alert prioritization and SOC-driven decision making.
+The goal was not simply to create detections, but to think like a Security Operations Center (SOC) analyst by:
+
+- Collecting endpoint telemetry in a cloud SIEM
+- Building custom detections using KQL
+- Mapping detections to the MITRE ATT&CK framework
+- Tuning alerts to reduce false positives
+- Prioritizing incidents based on risk and confidence
+- Investigating simulated attack activity
+
+Rather than generating incidents for every security event, detections were tuned to reflect realistic SOC workflows where low-confidence events provide visibility while high-confidence events generate actionable incidents.
 
 ---
 
 ## Skills Demonstrated
 
 - Microsoft Sentinel Deployment
-- Azure Monitor Agent (AMA)
-- Azure Log Analytics
-- Detection Engineering
 - Kusto Query Language (KQL)
-- Alert Tuning
-- Incident Response
 - Security Event Analysis
 - MITRE ATT&CK Mapping
-- Cloud Security Monitoring
+- Incident Response
+- Alert Tuning
+- Authentication Monitoring
+- Security Operations Workflows
 
 ---
 
-## Lab Architecture
+# Lab Architecture
 
-### Environment Components
+Telemetry was collected from a Windows Server virtual machine using the Azure Monitor Agent and forwarded into Microsoft Sentinel for analysis.
 
-- Windows Server VM
-- Azure Monitor Agent (AMA)
-- Data Collection Rule (DCR)
+## Architecture Diagram
+
+![Arch](Screenshots/ArchDiagram.png)
+
+
+---
+
+# Environment Setup
+
+## Azure Resources
+
+The environment consisted of:
+
+- Windows Server Virtual Machine
+- Azure Monitor Agent
 - Log Analytics Workspace
 - Microsoft Sentinel
+- Data Collection Rule (DCR)
 
-**[INSERT SCREENSHOT OF AZURE RESOURCE GROUP]**
+### Azure Resource Group
 
-**[INSERT SCREENSHOT OF WINDOWS SERVER VM]**
-
-### Architecture Diagram
-
-```text
-Windows Server VM
-        ↓
-Azure Monitor Agent
-        ↓
-Log Analytics Workspace
-        ↓
-Microsoft Sentinel
-        ↓
-Analytics Rules
-        ↓
-Alerts / Incidents
-```
-
-**[INSERT ARCHITECTURE DIAGRAM]**
+![RG](<Screenshots/Resource Group.png>)
 
 ---
 
-## Telemetry Collection
+## Endpoint Configuration
 
-The Azure Monitor Agent was deployed to collect Windows Security Events and forward them into Microsoft Sentinel through a Log Analytics Workspace.
+A Windows Server VM was deployed to simulate an enterprise endpoint and generate security telemetry.
 
-### Collected Event IDs
+### Windows Server VM
+
+![VM](Screenshots/VM.png)
+
+## Data Collection Rule (DCR)
+
+A Data Collection Rule (DCR) was configured and associated with the Windows Server endpoint.
+
+The DCR instructed the Azure Monitor Agent to collect Windows Security Audit events and forward them to the Log Analytics Workspace.
+
+Collected Security Event Categories:
+
+- Audit Success
+- Audit Failure
+
+These security audit logs contained the telemetry used throughout the project, including:
 
 | Event ID | Description |
 |-----------|-------------|
 | 4624 | Successful Logon |
 | 4625 | Failed Logon |
+| 4672 | Privileged Logon |
+| 4720 | User Account Creation |
+
+![DCR](<Screenshots/Screenshot 2026-06-18 191045.png>)
+
+The DCR served as the bridge between the endpoint and Microsoft Sentinel, enabling security event ingestion and detection engineering.
+
+The Azure Monitor Agent (AMA) was installed to forward Security Event Logs to Log Analytics.
+
+# Log Analytics Workspace (LAW)
+
+A Log Analytics Workspace was deployed to serve as the central repository for collected endpoint telemetry.
+
+The workspace stores security events collected by the Azure Monitor Agent and provides the data source queried by Microsoft Sentinel analytics rules.
+
+Responsibilities of the Log Analytics Workspace included:
+
+- Centralized log storage
+- KQL query execution
+- Security event retention
+- Data source for Microsoft Sentinel detections
+
+Without the Log Analytics Workspace, Microsoft Sentinel would have no telemetry available for detection engineering or incident generation.
+
+![law](Screenshots/law.png)
+
+# Microsoft Sentinel
+
+Microsoft Sentinel was deployed as the Security Information and Event Management (SIEM) platform for the lab.
+
+Sentinel consumes telemetry stored within the Log Analytics Workspace and enables:
+
+- Detection engineering
+- Alert generation
+- Incident creation
+- Threat hunting
+- MITRE ATT&CK mapping
+- Security investigations
+
+Unlike the Log Analytics Workspace, which primarily stores data, Sentinel provides the security analytics and incident response capabilities used by SOC analysts.
+
+The platform was used to create custom analytics rules, correlate suspicious activity, and generate incidents based on simulated attack scenarios.
+
+![sentinel](Screenshots/Sentinel.png)
+---
+
+## Log Collection Validation
+
+Successful telemetry ingestion was validated using heartbeat events and Windows Security Logs.
+
+### Example Security Events Collected
+
+| Event ID | Description |
+|----------|-------------|
+| 4624 | Successful Logon |
+| 4625 | Failed Logon |
 | 4672 | Special Privileges Assigned |
 | 4720 | User Account Created |
 
-**[INSERT SCREENSHOT OF AMA EXTENSION]**
+### Heartbeat Validation
 
-**[INSERT SCREENSHOT OF SECURITY LOGS ARRIVING IN LOG ANALYTICS]**
+![Heartbeat Query Results](images/heartbeat-query.png)
+
+### Security Event Validation
+
+![Security Event Query Results](images/security-events-query.png)
 
 ---
 
 # Detection Engineering
 
-A key objective of this project was demonstrating how SOC analysts balance visibility and alert fatigue.
-
-Not every detection should generate an incident.
-
-Some detections provide context and hunting capability, while others represent higher-confidence indicators that warrant analyst investigation.
+The following detections were developed and mapped to MITRE ATT&CK techniques.
 
 ---
 
-## Detection: Failed Authentication Burst
+# Failed Authentication Burst
 
-### Purpose
+## Objective
 
-Detect repeated failed authentication attempts that may indicate password guessing or password spraying activity.
+Detect repeated authentication failures which may indicate password guessing or brute-force activity.
 
 ### Event ID
 
-| Event ID | Description |
-|-----------|-------------|
-| 4625 | Failed Logon |
+**4625 – Failed Logon**
 
 ### MITRE ATT&CK
 
-| Technique | Description |
-|------------|------------|
-| T1110 | Brute Force |
+**T1110 – Brute Force**
+
+Attackers frequently attempt repeated authentication attempts against valid accounts.
+
+### Detection Logic
+
+Triggers when five or more failed authentication events occur.
 
 ### Severity
 
-Low
+**Low**
 
-### Incident Created?
+### Incident Creation
 
-No
+**Disabled**
 
-### Why?
+### SOC Rationale
 
-Failed logins are common in enterprise environments and often result from user mistakes, expired credentials, or service account issues.
+This rule intentionally does not generate incidents.
 
-Generating incidents for every authentication failure would overwhelm analysts.
+Failed logins occur frequently in enterprise environments due to:
 
-**[INSERT SCREENSHOT OF EVENT ID 4625 RESULTS]**
+- User mistakes
+- Forgotten passwords
+- Service account issues
+- Application authentication failures
+
+Generating incidents for every burst of failed logins would create excessive alert fatigue.
+
+Instead, this detection provides visibility and context for future investigations.
+
+### Detection Results
+
+![Failed Authentication Query Results](images/failed-auth-query.png)
 
 ---
 
-## Detection: Successful Authentication Activity
+# Successful Authentication Activity
 
-### Purpose
+## Objective
 
-Provide visibility into successful authentication activity.
+Monitor successful authentication activity.
 
 ### Event ID
 
-| Event ID | Description |
-|-----------|-------------|
-| 4624 | Successful Logon |
+**4624 – Successful Logon**
 
 ### MITRE ATT&CK
 
-| Technique | Description |
-|------------|------------|
-| T1078 | Valid Accounts |
+**T1078 – Valid Accounts**
+
+Threat actors frequently abuse legitimate credentials after compromise.
+
+### Detection Logic
+
+Detects successful authentication events.
 
 ### Severity
 
-Informational
+**Informational**
 
-### Incident Created?
+### Incident Creation
 
-No
+**Disabled**
 
-### Why?
+### SOC Rationale
 
-Successful logons occur constantly and provide valuable context during investigations but do not independently indicate malicious activity.
+Successful logins occur continuously throughout normal operations.
+
+Creating incidents for routine user activity would provide little security value.
+
+Instead, this detection serves as supporting telemetry during investigations.
+
+### Detection Results
+
+![Successful Logon Events](images/successful-logons.png)
 
 ---
 
-## Detection: Privileged Logon Detected
+# Privileged Logon Detected
 
-### Purpose
+## Objective
 
-Monitor administrative account activity.
+Monitor use of elevated privileges.
 
 ### Event ID
 
-| Event ID | Description |
-|-----------|-------------|
-| 4672 | Special Privileges Assigned |
+**4672 – Special Privileges Assigned to New Logon**
 
 ### MITRE ATT&CK
 
-| Technique | Description |
-|------------|------------|
-| T1078 | Valid Accounts |
+**T1078 – Valid Accounts**
+
+Attackers frequently attempt to obtain privileged access after compromising credentials.
+
+### Detection Logic
+
+Triggers when elevated privileges are assigned during authentication.
 
 ### Severity
 
-Informational
+**Informational**
 
-### Incident Created?
+### Incident Creation
 
-No
+**Disabled**
 
-### Why?
+### SOC Rationale
 
-Privileged logons occur frequently in enterprise environments and are most valuable when correlated with other suspicious events.
+Administrative logons are common in enterprise environments.
 
-**[INSERT SCREENSHOT OF EVENT ID 4672 RESULTS]**
+While privileged activity is important to monitor, generating incidents for every administrative logon would create excessive noise.
+
+This detection is retained for investigation context and threat hunting.
+
+### Detection Results
+
+![Event ID 4672 Results](images/eventid-4672-results.png)
 
 ---
 
-## Detection: Unauthorized Local Account Persistence Detection
+# Unauthorized Local Account Persistence Detection
 
-### Purpose
+## Objective
 
-Detect local account creation events that may indicate persistence activity.
+Detect creation of local user accounts which may be used to establish persistence.
 
 ### Event ID
 
-| Event ID | Description |
-|-----------|-------------|
-| 4720 | User Account Created |
+**4720 – User Account Created**
 
 ### MITRE ATT&CK
 
-| Technique | Description |
-|------------|------------|
-| T1136 | Create Account |
+**T1136 – Create Account**
+
+Attackers frequently create accounts to maintain long-term access after initial compromise.
+
+### Detection Logic
+
+Triggers when a local account is created on the monitored endpoint.
 
 ### Severity
 
-Medium
+**Medium**
 
-### Incident Created?
+### Incident Creation
 
-Yes
+**Enabled**
 
-### Why?
+### Why This Matters
 
-Account creation is a known persistence mechanism used by attackers to maintain access after initial compromise.
+Unlike authentication events, account creation is significantly less common.
 
-While account creation may be legitimate, it warrants analyst review.
+Although legitimate administrators create accounts regularly, account creation is often associated with persistence mechanisms used by attackers.
 
-**[INSERT SCREENSHOT OF EVENT ID 4720 RESULTS]**
+This rule was elevated to incident status to provide immediate analyst visibility into potential persistence activity.
 
-**[INSERT SCREENSHOT OF GENERATED INCIDENT]**
+### Detection Results
+
+![Event ID 4720 Results](images/eventid-4720-results.png)
+
+### Generated Incident
+
+![Unauthorized Local Account Persistence Incident](images/account-persistence-incident.png)
 
 ---
 
-## Detection: Potential Password Spray Success
+# Potential Password Spray Success
 
-### Purpose
+## Objective
 
-Detect successful authentication following multiple failed authentication attempts.
+Detect successful authentication activity following multiple failed authentication attempts.
 
 ### Event IDs
 
-| Event ID | Description |
-|-----------|-------------|
-| 4625 | Failed Logon |
-| 4624 | Successful Logon |
+- **4625 – Failed Logon**
+- **4624 – Successful Logon**
 
 ### MITRE ATT&CK
 
-| Technique | Description |
-|------------|------------|
-| T1110.003 | Password Spraying |
-| T1078 | Valid Accounts |
+- **T1110.003 – Password Spraying**
+- **T1078 – Valid Accounts**
+
+### Detection Logic
+
+Correlates repeated authentication failures with subsequent successful authentication activity.
 
 ### Severity
 
-Medium
+**Medium**
 
-### Incident Created?
+### Incident Creation
 
-Yes
+**Enabled**
 
-### Why?
+### Why This Matters
 
-Repeated authentication failures followed by successful access may indicate compromised credentials.
+A successful authentication following multiple failures represents a higher-confidence indicator of compromise than failed logins alone.
 
-This provides significantly higher confidence than failed logins alone.
+This pattern may indicate:
 
-**[INSERT SCREENSHOT OF PASSWORD SPRAY INCIDENT]**
+- Password spraying
+- Credential guessing
+- Credential compromise
+
+Because multiple events are correlated together, confidence is significantly higher than standalone authentication failures.
+
+### Generated Incident
+
+![Password Spray Incident](images/password-spray-incident.png)
 
 ---
 
-## Detection: Potential Account Compromise and Persistence
+# Potential Account Compromise and Persistence
 
-### Purpose
+## Objective
 
-Correlate authentication failures, successful authentication, and account creation activity into a single high-confidence incident.
+Correlate authentication activity and persistence-related behavior into a high-confidence incident.
 
 ### Event IDs
 
-| Event ID | Description |
-|-----------|-------------|
-| 4625 | Failed Logon |
-| 4624 | Successful Logon |
-| 4720 | User Account Created |
+- **4625 – Failed Logon**
+- **4624 – Successful Logon**
+- **4720 – User Account Created**
 
 ### MITRE ATT&CK
 
-| Technique | Description |
-|------------|------------|
-| T1110 | Brute Force |
-| T1110.003 | Password Spraying |
-| T1078 | Valid Accounts |
-| T1136 | Create Account |
+- **T1110.003 – Password Spraying**
+- **T1078 – Valid Accounts**
+- **T1136 – Create Account**
+
+### Detection Logic
+
+Triggers when the following activities occur within the defined investigation window:
+
+- Failed Authentication Activity
+- Successful Authentication Activity
+- Account Creation Activity
 
 ### Severity
 
-High
+**High**
 
-### Incident Created?
+### Incident Creation
 
-Yes
+**Enabled**
 
-### Why?
+### SOC Rationale
 
-This rule correlates multiple attack stages into a single incident, significantly increasing confidence that malicious activity occurred.
+This detection represents a higher-confidence attack scenario.
 
-### Attack Chain
+Rather than generating incidents for individual events, multiple suspicious activities are correlated together.
 
-```text
-Failed Authentication Attempts
-            ↓
-Successful Authentication
-            ↓
-Local Account Creation
-            ↓
-Persistence Established
-```
+This significantly reduces false positives while increasing detection confidence.
 
-**[INSERT SCREENSHOT OF CORRELATION QUERY RESULTS]**
+The resulting incident more closely resembles real-world SOC detection engineering practices.
 
-**[INSERT SCREENSHOT OF HIGH SEVERITY INCIDENT]**
+### Correlation Results
+
+![Correlation Query Results](images/correlation-query-results.png)
+
+### Generated Incident
+
+![Potential Account Compromise and Persistence Incident](images/account-compromise-persistence-incident.png)
 
 ---
+# Alert Tuning and Incident Prioritization
 
-# Alert Tuning Strategy
+Not all detections were configured to generate incidents.
 
-One of the primary goals of this project was demonstrating alert tuning and analyst prioritization.
+The following detections were retained as informational telemetry:
 
-### Detections Only
-
-- Failed Authentication Burst
 - Successful Authentication Activity
 - Privileged Logon Detected
+- Failed Authentication Burst
 
-These detections provide visibility and investigative context but are not independently strong indicators of malicious activity.
+These events occur frequently in enterprise environments and would create excessive alert fatigue if every occurrence generated an incident.
 
-### Incident-Generating Detections
+The following detections were promoted to incidents:
 
 - Unauthorized Local Account Persistence Detection
 - Potential Password Spray Success
 - Potential Account Compromise and Persistence
 
-These detections provide higher confidence indicators that warrant analyst investigation.
+These detections represent higher-confidence indicators of malicious activity because they either indicate persistence or correlate multiple suspicious events together.
 
-This approach reduces alert fatigue while preserving visibility into important security events.
-
----
-
-# Incident Investigation
-
-## Password Spray Success
-
-### Findings
-
-- Multiple failed logon attempts observed
-- Successful authentication followed
-- Activity aligned with password spraying behavior
-
-### Recommendation
-
-- Investigate authentication source
-- Review account activity
-- Enforce MFA
+This approach reflects real-world SOC practices where analyst attention is reserved for high-value security events.
 
 ---
 
-## Potential Account Compromise and Persistence
+# Attack Simulation
 
-### Findings
+The following attack chain was simulated to validate detections and incident generation.
 
-- Failed logons detected
-- Successful authentication observed
-- Local account creation detected
-- Multiple ATT&CK techniques observed
+```text
+Failed Authentication Attempts (4625)
+                ↓
+Successful Authentication (4624)
+                ↓
+Local Account Creation (4720)
+                ↓
+High Severity Incident
+```
 
-### Recommendation
+The attack chain demonstrates a potential progression from credential access to persistence.
 
-- Validate account legitimacy
-- Review authentication activity
-- Remove unauthorized accounts
-- Investigate potential credential compromise
+### Investigation Timeline
 
-**[INSERT SCREENSHOT OF INCIDENT INVESTIGATION VIEW]**
+![Attack Chain Investigation](images/attack-chain-investigation.png)
 
 ---
 
 # MITRE ATT&CK Mapping
 
 | Detection | ATT&CK Technique |
-|------------|------------|
+|------------|-----------------|
 | Failed Authentication Burst | T1110 |
 | Successful Authentication Activity | T1078 |
 | Privileged Logon Detected | T1078 |
 | Unauthorized Local Account Persistence Detection | T1136 |
-| Potential Password Spray Success | T1110.003, T1078 |
-| Potential Account Compromise and Persistence | T1110, T1110.003, T1078, T1136 |
+| Potential Password Spray Success | T1110.003 |
+| Potential Account Compromise and Persistence | T1110.003, T1078, T1136 |
 
 ---
 
 # Lessons Learned
 
-This project demonstrated how Microsoft Sentinel transforms endpoint telemetry into actionable security incidents.
+A major lesson from this project was the importance of alert tuning and incident prioritization.
 
-The most important lesson learned was that effective SOC operations require alert tuning. Not every detection should become an incident. High-confidence detections should be escalated for investigation, while lower-confidence detections provide context, visibility, and hunting opportunities.
+While many security events may initially appear suspicious, not every event warrants analyst investigation.
 
-By correlating multiple security events into a single incident, analysts can reduce noise, improve detection confidence, and prioritize meaningful threats more effectively.
+Examples include:
+
+- Failed logons
+- Successful logons
+- Administrative logons
+
+These events occur regularly in enterprise environments and are best used as supporting telemetry.
+
+Higher-confidence detections were promoted to incidents only when activity suggested:
+
+- Credential compromise
+- Persistence
+- Multi-stage attack behavior
+
+This approach reduces alert fatigue while allowing analysts to focus on the most meaningful security events.
+
+---
+
+# Conclusion
+
+This project demonstrates the deployment of a cloud-based SOC using Microsoft Sentinel and Azure Monitor, including endpoint telemetry collection, detection engineering, MITRE ATT&CK mapping, alert tuning, and incident generation.
+
+By focusing on both technical implementation and SOC decision-making, the lab provided practical experience with how security analysts investigate, prioritize, and respond to security events in modern enterprise environments.
