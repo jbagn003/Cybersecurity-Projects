@@ -13,7 +13,7 @@ The goal was not simply to create detections, but to think like a SOC analyst by
 - Prioritizing incidents based on risk and confidence
 - Investigating simulated attack activity
 
-Rather than generating incidents for every security event, detections were deliberately tuned to reflect realistic SOC workflows — where low-confidence events provide visibility and supporting context, while high-confidence, correlated events generate actionable incidents. This distinction is what separates a functional detection engineering program from one that drowns analysts in noise.
+Rather than generating incidents for every security event, detections were deliberately tuned to reflect realistic SOC workflows where low-confidence events provide visibility and supporting context, while high-confidence, correlated events generate actionable incidents. This distinction is what separates a functional detection engineering program from one that drowns analysts in noise.
 
 ---
 
@@ -34,7 +34,7 @@ Rather than generating incidents for every security event, detections were delib
 
 Telemetry was collected from a Windows Server virtual machine using the Azure Monitor Agent (AMA) and forwarded into a Log Analytics Workspace, which Microsoft Sentinel consumed as its data source.
 
-This architecture mirrors how enterprise SOC environments typically ingest endpoint telemetry — the agent handles local log collection and secure forwarding, the workspace provides centralized storage and query capability, and Sentinel sits on top as the analytics and incident management layer.
+This architecture mirrors how enterprise SOC environments typically ingest endpoint telemetry; the agent handles local log collection and secure forwarding, the workspace provides centralized storage and query capability, and Sentinel sits on top as the analytics and incident management layer.
 
 ## Architecture Diagram
 
@@ -66,7 +66,7 @@ The environment consisted of:
 
 ## Endpoint Configuration
 
-A Windows Server VM was deployed to simulate an enterprise endpoint and generate realistic security telemetry. Windows Server was selected specifically because it produces the Security Audit event logs central to this lab — event IDs in the 4xxx range that cover logon activity, privilege use, and account management.
+A Windows Server VM was deployed to simulate an enterprise endpoint and generate realistic security telemetry. Windows Server was selected specifically because it produces the Security Audit event logs central to this lab. Event IDs in the 4xxx range that cover logon activity, privilege use, and account management.
 
 ### Windows Server VM
 
@@ -76,7 +76,7 @@ A Windows Server VM was deployed to simulate an enterprise endpoint and generate
 
 ## Data Collection Rule (DCR)
 
-A Data Collection Rule (DCR) was configured and associated with the Windows Server endpoint. The DCR acts as the policy layer that tells the Azure Monitor Agent exactly what to collect and where to send it — without a DCR, the agent installs but collects nothing.
+A Data Collection Rule (DCR) was configured and associated with the Windows Server endpoint. The DCR acts as the policy layer that tells the Azure Monitor Agent exactly what to collect and where to send it. Without a DCR, the agent installs but collects nothing.
 
 The DCR was scoped to Windows Security Audit events only, keeping ingestion focused on the event categories relevant to detection engineering rather than pulling in noisier sources like Application or System logs.
 
@@ -98,13 +98,13 @@ These security audit logs contained the telemetry used throughout the project, i
   <img src="Screenshots/Screenshot 2026-06-18 191045.png" alt="DCR" width="900">
 </p>
 
-The DCR served as the bridge between the endpoint and Microsoft Sentinel, enabling security event ingestion and detection engineering. This separation of concerns — agent, DCR, workspace, SIEM — is an important architectural pattern in modern cloud security deployments because it allows each layer to be modified independently.
+The DCR served as the bridge between the endpoint and Microsoft Sentinel, enabling security event ingestion and detection engineering. This separation of concerns (agent, DCR, workspace, SIEM) is an important architectural pattern in modern cloud security deployments because it allows each layer to be modified independently.
 
 # Log Analytics Workspace (LAW)
 
 A Log Analytics Workspace was deployed to serve as the central repository for collected endpoint telemetry.
 
-The workspace stores security events collected by the Azure Monitor Agent and provides the data source queried by Microsoft Sentinel analytics rules. All KQL queries in this project execute against data stored here — Sentinel itself does not store logs, it queries them.
+The workspace stores security events collected by the Azure Monitor Agent and provides the data source queried by Microsoft Sentinel analytics rules. All KQL queries in this project execute against data stored here. Sentinel itself does not store logs, it queries them.
 
 Responsibilities of the Log Analytics Workspace included:
 
@@ -130,7 +130,7 @@ Sentinel consumes telemetry stored within the Log Analytics Workspace and enable
 - MITRE ATT&CK mapping
 - Security investigations
 
-Unlike the Log Analytics Workspace, which primarily stores and indexes data, Sentinel provides the security analytics and incident response capabilities that SOC analysts actually work from day to day. Analytics rules run on a schedule against the workspace data, evaluate logic, and — when conditions are met — generate alerts that can be promoted into incidents.
+Unlike the Log Analytics Workspace, which primarily stores and indexes data, Sentinel provides the security analytics and incident response capabilities that SOC analysts actually work from day to day. Analytics rules run on a schedule against the workspace data, evaluate logic, and when conditions are met, generate alerts that can be promoted into incidents.
 
 The platform was used to create custom analytics rules, correlate suspicious activity across multiple event types, and generate incidents based on simulated attack scenarios.
 
@@ -142,7 +142,7 @@ The platform was used to create custom analytics rules, correlate suspicious act
 
 ## Log Collection Validation
 
-Before building any detections, ingestion had to be confirmed. Two validation checks were performed: heartbeat connectivity and security event presence. This step matters because silent ingestion failures are a real operational risk — if logs stop flowing and no one notices, detections keep running against stale or absent data.
+Before building any detections, ingestion had to be confirmed. Two validation checks were performed: heartbeat connectivity and security event presence. This step matters because silent ingestion failures are a real operational risk. If logs stop flowing and no one notices, detections keep running against stale or absent data.
 
 ### Example Security Events Collected
 
@@ -155,7 +155,7 @@ Before building any detections, ingestion had to be confirmed. Two validation ch
 
 ### Heartbeat Validation
 
-The Heartbeat table was queried to confirm the Azure Monitor Agent was actively communicating with the Log Analytics Workspace. Each heartbeat record represents a successful check-in from the agent — gaps in heartbeat data would indicate connectivity or agent health issues that would affect log delivery.
+The Heartbeat table was queried to confirm the Azure Monitor Agent was actively communicating with the Log Analytics Workspace. Each heartbeat record represents a successful check-in from the agent. Gaps in heartbeat data would indicate connectivity or agent health issues that would affect log delivery.
 
 <p align="center">
   <img src="Screenshots/heartbeat.png" alt="Heartbeat" width="100%">
@@ -163,7 +163,7 @@ The Heartbeat table was queried to confirm the Azure Monitor Agent was actively 
 
 ### Security Event Validation
 
-With heartbeat confirmed, the SecurityEvent table was queried directly to verify the expected event IDs were being collected. Seeing real event records — with populated fields like AccountName, LogonType, and IpAddress — confirmed the DCR was correctly scoped and the pipeline was functioning end to end.
+With heartbeat confirmed, the SecurityEvent table was queried directly to verify the expected event IDs were being collected. Seeing real event records with populated fields like AccountName, LogonType, and IpAddress confirmed the DCR was correctly scoped and the pipeline was functioning end to end.
 
 <p align="center">
   <img src="Screenshots/security event.png" alt="Security Events" width="100%">
@@ -171,7 +171,7 @@ With heartbeat confirmed, the SecurityEvent table was queried directly to verify
 
 # Detection Engineering
 
-The following detections were developed and mapped to MITRE ATT&CK techniques. Each rule was evaluated not just on whether it could fire, but on whether it *should* fire — and what action, if any, an analyst should take as a result. That framing drove the incident creation decisions throughout.
+The following detections were developed and mapped to MITRE ATT&CK techniques. Each rule was evaluated not just on whether it could fire, but on whether it *should* fire - and what action, if any, an analyst should take as a result. That framing drove the incident creation decisions throughout.
 
 ---
 
@@ -214,7 +214,7 @@ Failed logins occur at high volume in enterprise environments for entirely legit
 - Service accounts with stale cached credentials
 - Application authentication failures after configuration changes
 
-Generating incidents for every burst of failed logins would create alert fatigue that degrades analyst response to events that actually matter. The value here is in the data — having 4625 events available in the workspace means that when a higher-confidence alert fires, analysts can pull this telemetry as supporting context during investigation.
+Generating incidents for every burst of failed logins would create alert fatigue that degrades analyst response to events that actually matter. The value here is in the data. Having 4625 events available in the workspace means that when a higher-confidence alert fires, analysts can pull this telemetry as supporting context during investigation.
 
 ### Detection Results
 
@@ -238,7 +238,7 @@ Monitor successful authentication activity across the endpoint.
 
 **T1078 – Valid Accounts**
 
-Threat actors who successfully compromise credentials will authenticate using those credentials — which means their activity looks identical to legitimate user behavior at the individual event level.
+Threat actors who successfully compromise credentials will authenticate using those credentials which means their activity looks identical to legitimate user behavior at the individual event level.
 
 ### Detection Logic
 
@@ -254,7 +254,7 @@ Detects successful authentication events. The rule captures logon type, account 
 
 ### SOC Rationale
 
-Successful logins are among the highest-volume events in any Windows environment. Creating incidents for routine user authentication would produce thousands of daily alerts with almost no signal. The analytical value of 4624 events comes from correlation — a successful logon is meaningful when it follows multiple failures, occurs at an unusual hour, or appears on an account that doesn't typically authenticate interactively. On its own, it's baseline telemetry.
+Successful logins are among the highest-volume events in any Windows environment. Creating incidents for routine user authentication would produce thousands of daily alerts with almost no signal. The analytical value of 4624 events comes from correlation. A successful logon is meaningful when it follows multiple failures, occurs at an unusual hour, or appears on an account that doesn't typically authenticate interactively. On its own, it's baseline telemetry.
 
 ### Detection Results
 
@@ -294,7 +294,7 @@ Triggers when elevated privileges are assigned during authentication. The detect
 
 ### SOC Rationale
 
-Administrative logons are routine in managed enterprise environments. Domain admins, IT staff, and service accounts regularly trigger 4672 events during normal operations. Generating incidents for every privileged logon would bury analysts in noise from legitimate administrative activity. However, this telemetry becomes highly valuable when correlated with other suspicious behavior — a 4672 event following failed authentication attempts, for example, is a different story than a standalone administrative login.
+Administrative logons are routine in managed enterprise environments. Domain admins, IT staff, and service accounts regularly trigger 4672 events during normal operations. Generating incidents for every privileged logon would bury analysts in noise from legitimate administrative activity. However, this telemetry becomes highly valuable when correlated with other suspicious behavior. A 4672 event following failed authentication attempts, for example, is a different story than a standalone administrative login.
 
 ### Detection Results
 
@@ -334,7 +334,7 @@ Triggers when any local account creation event is observed on the monitored endp
 
 ### Why This Matters
 
-Account creation events are far less frequent than authentication events in typical environments. While legitimate administrators do create accounts, 4720 events are uncommon enough that each occurrence warrants analyst review. The risk calculus here is different from failed logins — the cost of a missed persistence mechanism outweighs the cost of investigating the occasional legitimate account creation. This rule was promoted to incident status to give analysts immediate visibility into potential persistence activity before it can be used.
+Account creation events are far less frequent than authentication events in typical environments. While legitimate administrators do create accounts, 4720 events are uncommon enough that each occurrence warrants analyst review. The risk calculus here is different from failed logins. The cost of a missed persistence mechanism outweighs the cost of investigating the occasional legitimate account creation. This rule was promoted to incident status to give analysts immediate visibility into potential persistence activity before it can be used.
 
 ### Detection Results
 
@@ -380,7 +380,7 @@ Correlates repeated authentication failures against one or more accounts with a 
 
 ### Why This Matters
 
-This detection demonstrates the value of event correlation over standalone alerting. A burst of 4625 events alone is low confidence — but when followed by a 4624 event, the pattern shifts meaningfully. An attacker running a password spray expects most attempts to fail; the successful authentication is what they were working toward. By correlating these two event types together, this rule catches the outcome of the attack rather than just the attempt — which is when analyst response actually matters. False positives are possible (a user who gets locked out and then successfully resets their password will trigger this), but the hit rate is high enough to justify incident creation and analyst review.
+This detection demonstrates the value of event correlation over standalone alerting. A burst of 4625 events alone is low confidence, but when followed by a 4624 event, the pattern shifts meaningfully. An attacker running a password spray expects most attempts to fail; the successful authentication is what they were working toward. By correlating these two event types together, this rule catches the outcome of the attack rather than just the attempt, which is when analyst response actually matters. False positives are possible (a user who gets locked out and then successfully resets their password will trigger this), but the hit rate is high enough to justify incident creation and analyst review.
 
 ### Detection Results
 
@@ -422,7 +422,7 @@ Triggers when all three of the following activities occur within the defined inv
 - Successful Authentication Activity
 - Account Creation Activity
 
-All three must be present for the rule to fire — a single missing element drops the detection below threshold.
+All three must be present for the rule to fire. A single missing element drops the detection below threshold.
 
 ### Severity
 
@@ -434,9 +434,9 @@ All three must be present for the rule to fire — a single missing element drop
 
 ### SOC Rationale
 
-This detection represents the highest-confidence rule in the lab because it captures a multi-stage attack pattern rather than an isolated event. The sequence — failed attempts, followed by success, followed by account creation — maps directly to the initial access and persistence phases of the ATT&CK framework. An attacker who successfully credentials-sprays into an account and then creates a backdoor account has established a foothold that will survive password changes and account lockouts.
+This detection represents the highest-confidence rule in the lab because it captures a multi-stage attack pattern rather than an isolated event. The sequence (failed attempts, followed by success, followed by account creation) maps directly to the initial access and persistence phases of the ATT&CK framework. An attacker who successfully credentials-sprays into an account and then creates a backdoor account has established a foothold that will survive password changes and account lockouts.
 
-The requirement that all three event types appear within the same window dramatically reduces false positives. Legitimate administrative activity rarely produces this exact pattern — an admin creating an account doesn't typically do so following a burst of authentication failures. When this rule fires, it demands immediate analyst attention.
+The requirement that all three event types appear within the same window dramatically reduces false positives. Legitimate administrative activity rarely produces this exact pattern. An admin creating an account doesn't typically do so following a burst of authentication failures. When this rule fires, it demands immediate analyst attention.
 
 This is the type of detection that distinguishes reactive monitoring from proactive threat detection: rather than waiting for each event to be investigated in isolation, the correlation logic does the analytical work of connecting the dots before an alert is even generated.
 
@@ -478,11 +478,11 @@ This tiered approach reflects real-world SOC practices where the volume of raw s
 
 The most important lesson from this project was the difference between *detecting* something and *knowing when to act on it*.
 
-Early in the lab, the instinct was to generate incidents for every suspicious-looking event. Failed logins look suspicious. Privileged logons look suspicious. But in a real SOC, generating an incident for every 4625 event would produce thousands of daily tickets, most of them legitimate — and analysts would eventually start closing them without review. That's how real attacks get missed.
+Early in the lab, the instinct was to generate incidents for every suspicious-looking event. Failed logins look suspicious. Privileged logons look suspicious. But in a real SOC, generating an incident for every 4625 event would produce thousands of daily tickets, most of them legitimate. Analysts would eventually start closing them without review. That's how real attacks get missed.
 
 The better approach is to ask what evidence would actually change analyst behavior. A single failed login doesn't justify a page. Five failed logins followed by a successful one does. A successful login followed by account creation, following failed logins, justifies escalation. The detection logic should encode that reasoning, not just flag raw events.
 
-This project also reinforced the importance of the full pipeline — not just the SIEM queries, but the DCR configuration, agent health monitoring, and log validation steps that ensure data is actually flowing. A sophisticated analytics rule running against missing data is worth nothing.
+This project also reinforced the importance of the full pipeline and not just the SIEM queries, but the DCR configuration, agent health monitoring, and log validation steps that ensure data is actually flowing. A sophisticated analytics rule running against missing data is worth nothing.
 
 ---
 
@@ -490,4 +490,4 @@ This project also reinforced the importance of the full pipeline — not just th
 
 This project demonstrates a cloud-based SOC deployment using Microsoft Sentinel and Azure Monitor, covering endpoint telemetry collection, detection engineering, MITRE ATT&CK mapping, alert tuning, and multi-stage incident correlation.
 
-The focus throughout was on the reasoning behind each decision — not just what was built, but why certain events were prioritized, why some rules generate incidents and others don't, and how individual detections fit into a broader picture of attacker behavior. That analytical layer is what separates a detection engineering program that produces signal from one that produces noise.
+The focus throughout was on the reasoning behind each decision and not just what was built, but why certain events were prioritized, why some rules generate incidents and others don't, and how individual detections fit into a broader picture of attacker behavior. That analytical layer is what separates a detection engineering program that produces signal from one that produces noise.
