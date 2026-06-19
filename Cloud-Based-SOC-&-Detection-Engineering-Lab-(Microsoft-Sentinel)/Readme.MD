@@ -116,7 +116,7 @@ Responsibilities of the Log Analytics Workspace included:
 Without the Log Analytics Workspace, Microsoft Sentinel would have no telemetry available for detection engineering or incident generation.
 
 <p align="center">
-  <img src="Screenshots/law.png" alt="LAW" width="2000" height="225
+  <img src="Screenshots/law.png" alt="LAW" width="100%">
 </p>
 
 # Microsoft Sentinel
