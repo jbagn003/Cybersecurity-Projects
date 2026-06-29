@@ -6,8 +6,6 @@
 
 ## Overview
 
-- [Why I Built This](#why-i-built-this)
-- [Environment](#environment)
 - [Role Based Access Control](#role-based-access-control-rbac--least-privilege)
 - [Identity Lifecycle Management](#identity-lifecycle-management-joiner--mover--leaver)
 - [Access Governance](#access-governance-quarterly-access-review)
@@ -143,29 +141,46 @@ I documented this as a formal access review artifact rather than just narrating 
 - **Access Baseline**  the approved least-privilege policy matrix
 - **Audit Findings**  finding-by-finding detail: expected vs. observed access, variance, risk rating, remediation action, status, and remediation date
 
-<img src="Audit%20Report/summary%20tab%20excel.PNG" alt="Access Review Summary Tab" width="600">
+<img src="Audit%20Report/summary%20tab%20excel.PNG" alt="Access Review Summary Tab" width="700">
 
 *Summary tab  KPIs and executive summary, the page I'd lead with if asked to walk through the review.*
 
-<img src="Audit%20Report/Access%20Baseline%20excel.PNG" alt="Access Baseline Tab" width="600">
+<img src="Audit%20Report/Access%20Baseline%20excel.PNG" alt="Access Baseline Tab" width="700">
 
 *Access Baseline tab  the approved least-privilege policy matrix, color-coded by access level (RW / R / No), used as the control every observed permission gets checked against.*
 
-<img src="Audit%20Report/Audit%20Findings%20Excel.PNG" alt="Audit Findings Tab" width="600">
+<img src="Audit%20Report/Audit%20Findings%20Excel.PNG" alt="Audit Findings Tab" width="1000">
 
 *Audit Findings tab  the three misconfigurations logged as formal findings with expected vs. observed access, risk rating, remediation action, and closure status.*
 
 <img src="Screenshots/reception%20in%20HR%20misconfig.PNG" alt="Reception in HR Misconfiguration" width="600">
 
-*Google Admin Console showing the Reception-department user as an active member of the HR Google Group  the unauthorized membership flagged as Finding AR-2026Q2-01.*
+*Google Admin Console showing the Reception department user as an active member of the HR Google Group, the unauthorized membership identified as Finding AR-2026Q2-01.*
+
+**Likely Root Cause:** The user was likely assigned to the incorrect Google Group during onboarding or a role change without validation against the approved RBAC baseline.
+
+**Potential Impact:** The user gained unnecessary read and write access to HR resources containing sensitive employee information, violating least privilege and increasing the risk of unauthorized data exposure.
+
+---
 
 <img src="Screenshots/doc%20in%20finance%20group%20misconfig.PNG" alt="Finance Group Misconfiguration" width="600">
 
-*Clinical staff member's group membership showing inclusion in the Finance Google Group, in violation of the documented baseline  Finding AR-2026Q2-02.*
+*Clinical department user shown as a member of the Finance Google Group, violating the documented access baseline and identified as Finding AR-2026Q2-02.*
+
+**Likely Root Cause:** Excess permissions were likely introduced during a department transfer or manual group assignment without removing previous access.
+
+**Potential Impact:** The user received unauthorized access to financial records, increasing the risk of accidental disclosure or misuse of confidential business information.
+
+---
 
 <img src="Screenshots/Super%20admin%20misconfig.PNG" alt="Super Admin Misconfiguration" width="600">
 
-*Admin role assignment page showing an HR-department account holding the Super Admin role  Finding AR-2026Q2-03, rated Critical.*
+*Admin role assignment page showing an HR department account holding the Super Admin role, identified as Finding AR-2026Q2-03 and rated Critical.*
+
+**Likely Root Cause:** Administrative privileges were granted temporarily or assigned incorrectly and were never reviewed or removed through a formal access governance process.
+
+**Potential Impact:** A compromised or misused Super Admin account could bypass security controls, modify tenant wide security settings, create privileged accounts, and compromise the entire Google Workspace environment.
+
 
 **What I'd do differently at enterprise scale:** A quarterly manual review catches drift after the fact, but it doesn't prevent it between cycles. In production, I'd push for an automated weekly or daily group-membership export via the Admin SDK / Reports API, diffed against the approved baseline, so deviations get flagged in days instead of up to a full quarter.
 
