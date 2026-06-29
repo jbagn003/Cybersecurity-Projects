@@ -41,15 +41,15 @@ Access misconfiguration is one of the most common root causes behind real health
 
 I structured the org with six departments, each represented by a dedicated Organizational Unit, a Google Group, and a corresponding Shared Drive  so that every access decision could be made (and reviewed) at the group level rather than the individual level. This is the same pattern most enterprises use because it scales: you manage 6 groups, not 30 individual users.
 
-<img src="Screenshots/All%20Groups.PNG" alt="All Groups" width="600">
+<img src="Screenshots/All%20Groups.PNG" alt="All Groups" width="400">
 
 *Department-level Google Groups created to drive group-based RBAC rather than per-user permissions. Each group maps 1:1 to an OU and a Shared Drive, which is what makes the access review in the next section actually auditable  I can check group membership instead of tracing individual ACLs.*
 
-<img src="Screenshots/All%20shared%20drives.PNG" alt="All Shared Drives" width="600">
+<img src="Screenshots/All%20shared%20drives.PNG" alt="All Shared Drives" width="500">
 
 *The resulting Shared Drive layout  one drive per department plus a shared "Company Policies" drive that's read-accessible org-wide.*
 
-<img src="Screenshots/shared%20drive%20creation%20(users%20not%20allowed).PNG" alt="Shared Drive Creation" width="600">
+<img src="Screenshots/shared%20drive%20creation%20(users%20not%20allowed).PNG" alt="Shared Drive Creation" width="400">
 
 *Restricted Shared Drive creation to admins only via Workspace settings, so end users can't spin up ungoverned drives outside the access model.*
 
@@ -77,9 +77,9 @@ A few deliberate design choices worth calling out:
 
 I validated the model by testing cross-department access directly  logging in as a non-IT user and confirming a restricted Shared Drive correctly refused access rather than just assuming the group settings were doing their job.
 
-<img src="Screenshots/Finance%20drive%20members.PNG" alt="Finance Drive Members" width="500">
+<img src="Screenshots/Finance%20drive%20members.PNG" alt="Finance Drive Members" width="400">
 
-*Confirms Finance Shared Drive membership matches the baseline  only the Finance and IT groups appear, no unauthorized members at time of setup.*
+*Confirms Finance Shared Drive membership matches the baseline  only the Finance and IT groups have access to make changes while other roles enhoy viewing access*
 
 <img src="Screenshots/Request%20Access%20shared%20drive%20for%20nurse%20at%20finance%20docs.PNG" alt="Finance Access Request" width="300">
 
@@ -94,7 +94,7 @@ Access control design is only half the job  the other half is making sure people
 ### Joiner
 Provisioned a new employee end-to-end: created the account, assigned it to the correct OU, added it to the relevant department group, and enforced the org's password policy and MFA requirement immediately at creation  not as a follow-up task.
 
-<img src="Screenshots/joiner%20creation.PNG" alt="Joiner Creation" width="400">
+<img src="Screenshots/joiner%20creation.PNG" alt="Joiner Creation" width="350">
 
 *New user account created in the Workspace Admin Console with department and title fields set, which drive downstream OU placement.*
 
@@ -107,7 +107,7 @@ Provisioned a new employee end-to-end: created the account, assigned it to the c
 *Adding the new user to their department Google Group  this single action is what grants them their entire Shared Drive access profile, since permissions are never assigned individually.*
 
 ### Mover
-Simulated an internal promotion/transfer by changing the user's group membership  removing them from their old department group and adding them to the new one  and then explicitly verifying the old access was actually gone, not just that the new access was present. This distinction matters: a lot of real-world access creep happens specifically because the "remove old access" half of a move gets skipped.
+When there is an internal promotion/transfer, we can change the user's group membership. First, I removed them from their old department group and added them to the new one while explicitly verifying the old access was actually gone, not just that the new access was present. This distinction matters: a lot of real-world access creep happens specifically because the "remove old access" half of a move gets skipped.
 
 ### Leaver
 Performed a full account suspension as part of offboarding, immediately cutting off authentication rather than relying on group removal alone (suspension blocks login entirely; just removing groups can still leave residual access depending on caching and sync timing).
