@@ -77,11 +77,11 @@ A few deliberate design choices worth calling out:
 
 I validated the model by testing cross-department access directly  logging in as a non-IT user and confirming a restricted Shared Drive correctly refused access rather than just assuming the group settings were doing their job.
 
-<img src="Screenshots/Finance%20drive%20members.PNG" alt="Finance Drive Members" width="600">
+<img src="Screenshots/Finance%20drive%20members.PNG" alt="Finance Drive Members" width="500">
 
 *Confirms Finance Shared Drive membership matches the baseline  only the Finance and IT groups appear, no unauthorized members at time of setup.*
 
-<img src="Screenshots/Request%20Access%20shared%20drive%20for%20nurse%20at%20finance%20docs.PNG" alt="Finance Access Request" width="600">
+<img src="Screenshots/Request%20Access%20shared%20drive%20for%20nurse%20at%20finance%20docs.PNG" alt="Finance Access Request" width="300">
 
 *A Clinical-department test user (nurse) attempting to access the Finance Drive and being correctly prompted to request access rather than getting it automatically  validating that least privilege is enforced at the platform level, not just on paper.*
 
@@ -94,15 +94,15 @@ Access control design is only half the job  the other half is making sure people
 ### Joiner
 Provisioned a new employee end-to-end: created the account, assigned it to the correct OU, added it to the relevant department group, and enforced the org's password policy and MFA requirement immediately at creation  not as a follow-up task.
 
-<img src="Screenshots/joiner%20creation.PNG" alt="Joiner Creation" width="600">
+<img src="Screenshots/joiner%20creation.PNG" alt="Joiner Creation" width="400">
 
 *New user account created in the Workspace Admin Console with department and title fields set, which drive downstream OU placement.*
 
-<img src="Screenshots/joiner%20OU%20assingment.PNG" alt="Joiner OU Assignment" width="600">
+<img src="Screenshots/joiner%20OU%20assingment.PNG" alt="Joiner OU Assignment" width="300">
 
 *Confirms the new account landed in the correct Organizational Unit  this matters because OU placement is what inherits department-wide policies (password rules, app access) automatically, rather than requiring manual policy assignment per user.*
 
-<img src="Screenshots/add%20joiner%20to%20group.PNG" alt="Add Joiner to Group" width="600">
+<img src="Screenshots/add%20joiner%20to%20group.PNG" alt="Add Joiner to Group" width="300">
 
 *Adding the new user to their department Google Group  this single action is what grants them their entire Shared Drive access profile, since permissions are never assigned individually.*
 
@@ -194,7 +194,7 @@ Configured baseline authentication hardening across the tenant: MFA enforcement,
 
 *Multi-Factor Authentication enforcement enabled at the organizational level in the Admin Console  applies across all departments, with no exceptions carved out.*
 
-<img src="Screenshots/Password%20management.PNG" alt="Password Management" width="600">
+<img src="Screenshots/Password%20management.PNG" alt="Password Management" width="400">
 
 *Password policy configuration showing complexity and length requirements enforced tenant-wide.*
 
@@ -204,7 +204,7 @@ Configured baseline authentication hardening across the tenant: MFA enforcement,
 
 Beyond department-level Shared Drive segregation, I tested whether sharing policy actually held up against a realistic exfiltration attempt  a user trying to share a restricted document externally.
 
-<img src="Screenshots/cant%20share(nurse%20to%20external).PNG" alt="External Sharing Blocked" width="600">
+<img src="Screenshots/cant%20share(nurse%20to%20external).PNG" alt="External Sharing Blocked" width="300">
 
 *A Clinical-department test user attempting to share a document with an external (non-organizational) email address  blocked by Workspace sharing policy, confirming the control works against an actual attempt rather than just existing in settings.*
 
@@ -220,7 +220,7 @@ Third-party OAuth apps are an underrated access-control gap: a user can grant a 
 
 A non-admin test user authorized two third-party apps (Adobe Acrobat, SmallPDF) requesting Drive scopes. I reviewed the resulting authorization events in the Workspace Audit Log to confirm visibility into what had been granted and by whom, then locked down the policy so future third-party app authorizations require admin approval before they can complete  closing the gap rather than just documenting it.
 
-<img src="Screenshots/OAuth%20SMallPDF%20add-on%20install%20permisions%20request%20for%20nurse.PNG" alt="OAuth SmallPDF Permission Request" width="600">
+<img src="Screenshots/OAuth%20SMallPDF%20add-on%20install%20permisions%20request%20for%20nurse.PNG" alt="OAuth SmallPDF Permission Request" width="400">
 
 *The OAuth consent screen a test user sees when authorizing SmallPDF, showing the Drive scopes being requested  this is the exact moment unreviewed third-party access typically gets granted in real organizations.*
 
@@ -228,7 +228,7 @@ A non-admin test user authorized two third-party apps (Adobe Acrobat, SmallPDF) 
 
 *Workspace Audit Log entries showing both third-party app authorizations (SmallPDF and Adobe Acrobat) granted by the test user  confirming these events are logged and reviewable.*
 
-<img src="Screenshots/configuring%20accesss%20for%20third%20party%20integratino%20(squarespace%20login).PNG" alt="Third-Party Integration Configuration" width="600">
+<img src="Screenshots/configuring%20accesss%20for%20third%20party%20integratino%20(squarespace%20login).PNG" alt="Third-Party Integration Configuration" width="400">
 
 *Configuring Workspace's third-party app access policy to require administrator approval going forward.*
 
