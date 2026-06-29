@@ -66,7 +66,7 @@ Departments included:
 
 ![All Groups](Screenshots/All%20Groups.PNG)
 
-![Shared Drive Creation](Screenshots/shared%20drive%20creation.PNG)
+![Shared Drive Creation](Screenshots/shared%20drive%20creation%20(users%20not%20allowed).PNG)
 
 ![All Shared Drives](Screenshots/All%20shared%20drives.PNG)
 
@@ -111,8 +111,6 @@ Least privilege was validated by testing cross-department access restrictions.
 
 ![Finance Access Request](Screenshots/Request%20Access%20shared%20drive%20for%20nurse%20at%20finance%20docs.PNG)
 
-![Finance Permission Misconfiguration](Screenshots/doc%20in%20finance%20group%20misconfig.PNG)
-
 ---
 
 # Identity Lifecycle Management (Joiner / Mover / Leaver)
@@ -135,7 +133,7 @@ Provisioned a new employee by:
 
 ![Add Joiner to Group](Screenshots/add%20joiner%20to%20group.PNG)
 
-![Joiner OU Assignment](Screenshots/joiner%20OU%20assignment.PNG)
+![Joiner OU Assignment](Screenshots/joiner%20OU%20assingment.PNG)
 
 ---
 
@@ -238,11 +236,12 @@ Validated policy enforcement by confirming application access was denied after p
 
 ## Evidence
 
-![OAuth Permission Request](Screenshots/OAuth%20SmallPDF%20add-on%20install%20permissions%20request%20for%20nurse.PNG)
+![OAuth SmallPDF Permission Request](Screenshots/OAuth%20SMallPDF%20add-on%20install%20permisions%20request%20for%20nurse.PNG)
 
-![OAuth Audit Logs](Screenshots/OAuth%20Log%20events%20showing%20small%20pdf%20and%20adobe%20acrobat%20granted%20by%20nurse.PNG)
+![OAuth Audit Log](Screenshots/OAuth%20Log%20events%20showing%20small%20psf%20and%20adobe%20acropat%20granted%20by%20nurse.PNG)
 
-![Third-Party Integration Policy](Screenshots/configuring%20access%20for%20third%20party%20integration%20(squarespace%20login).PNG)
+![Third-Party Integration Configuration](Screenshots/configuring%20accesss%20for%20third%20party%20integratino%20(squarespace%20login).PNG)
+
 
 ![Access Blocked After Policy Change](Screenshots/Access%20blocked%20for%20small%20pdf%20for%20nurse%20after%20change.PNG)
 
@@ -263,7 +262,7 @@ Validated external email identification using a simulated phishing email.
 
 ![Gmail Safety Settings](Screenshots/gmail%20safety%20settings.PNG)
 
-![External Email Warning](Screenshots/external%20email%20phishing%20attempt%20marked%20as%20external.PNG)
+![External Email Marked as External](Screenshots/external%20email%20phising%20attempt%20marked%20as%20external.PNG)
 
 ---
 
