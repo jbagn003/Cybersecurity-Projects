@@ -8,4 +8,4 @@ Writeups and projects for cybersecurity learning, including labs, vulnerability 
 
 - [Cloud SOC & Detection Engineering Lab — Microsoft Sentinel (SIEM) | Azure | KQ](<Cloud SOC & Detection Engineering Lab — Microsoft Sentinel (SIEM) | Azure | KQL>)
 
-- []
+- [Enterprise Identity & Access Management Lab | Google Workspace | RBAC | Access Auditing](<Enterprise Identity & Access Management Lab | Google Workspace | RBAC | Access Auditing>)
