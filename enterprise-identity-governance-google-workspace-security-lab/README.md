@@ -16,16 +16,14 @@ The lab was built to mirror responsibilities commonly found in enterprise health
 
 **Bagnis Labs**
 
-Industry:
-Healthcare Technology
+**Industry:** Healthcare Technology
 
-Identity Platform:
-Google Workspace Business Standard
+**Identity Platform:** Google Workspace Business Standard
 
-Domain:
-bagnislabs.com
+**Domain:** bagnislabs.com
 
-Users:
+### Users
+
 - Executive
 - IT Administrator
 - HR
@@ -41,7 +39,7 @@ Users:
 - Build a secure Google Workspace tenant
 - Implement enterprise IAM concepts
 - Enforce least privilege
-- Design role-based access control (RBAC)
+- Design Role-Based Access Control (RBAC)
 - Simulate Joiner-Mover-Leaver lifecycle
 - Perform quarterly access reviews
 - Configure Google Workspace security controls
@@ -64,13 +62,13 @@ Departments included:
 - Finance
 - Reception
 
-### Evidence
+## Evidence
 
-![sasdasd](vscode-userdata:/User/caches/remote-clipboard/09e39482-4655-4816-a275-e3824fc4c0cd/d6c461fd-3ea9-4cf5-85d3-05ddcb15aea5/joiner%20creation.PNG)
+![All Groups](Screenshots/All%20Groups.PNG)
 
-`/Screenshots/shared drive creation.png`
+![Shared Drive Creation](Screenshots/shared%20drive%20creation.PNG)
 
-`/Screenshots/All shared drives.png`
+![All Shared Drives](Screenshots/All%20shared%20drives.PNG)
 
 ---
 
@@ -82,33 +80,38 @@ Department groups were granted access to Shared Drives according to business fun
 
 Examples:
 
-Clinical
+### Clinical
+
 - Clinical Records
-- No Finance
+- No Finance Access
 
-HR
+### HR
+
 - HR Documents
-- No Clinical
+- No Clinical Access
 
-Finance
+### Finance
+
 - Finance Records
 - Read Company Policies
 
-Reception
+### Reception
+
 - Company Policies Only
 
-IT
+### IT
+
 - Administrative Access
 
 Least privilege was validated by testing cross-department access restrictions.
 
-### Evidence
+## Evidence
 
-`/Screenshots/Finance drive members.png`
+![Finance Drive Members](Screenshots/Finance%20drive%20members.PNG)
 
-`/Screenshots/Request Access shared drive for nurse at finance docs.png`
+![Finance Access Request](Screenshots/Request%20Access%20shared%20drive%20for%20nurse%20at%20finance%20docs.PNG)
 
-`/Screenshots/doc in finance group misconfig.png`
+![Finance Permission Misconfiguration](Screenshots/doc%20in%20finance%20group%20misconfig.PNG)
 
 ---
 
@@ -120,19 +123,19 @@ Simulated enterprise onboarding, role transitions, and offboarding.
 
 Provisioned a new employee by:
 
-- Creating account
-- Assigning Organizational Unit
+- Creating the user account
+- Assigning the Organizational Unit
 - Assigning Google Groups
-- Applying password policy
-- Requiring MFA
+- Applying password policies
+- Requiring Multi-Factor Authentication (MFA)
 
 ### Evidence
 
-`/Screenshots/joiner creation.png`
+![Joiner Creation](Screenshots/joiner%20creation.PNG)
 
-`/Screenshots/add joiner to group.png`
+![Add Joiner to Group](Screenshots/add%20joiner%20to%20group.PNG)
 
-`/Screenshots/joiner OU assignment.png`
+![Joiner OU Assignment](Screenshots/joiner%20OU%20assignment.PNG)
 
 ---
 
@@ -140,7 +143,7 @@ Provisioned a new employee by:
 
 Simulated an internal promotion by updating group membership and department permissions while maintaining least privilege.
 
-(Changes documented within repository.)
+Changes were validated by confirming previous department permissions were removed and new permissions were successfully applied.
 
 ---
 
@@ -150,7 +153,7 @@ Performed account suspension and removal from the identity environment.
 
 ### Evidence
 
-`/Screenshots/JOINER SUSPENDED.png`
+![Joiner Suspended](Screenshots/JOINER%20SUSPENDED.PNG)
 
 ---
 
@@ -164,23 +167,21 @@ Introduced intentional privilege misconfigurations including:
 - Doctor assigned Finance permissions
 - HR assigned Super Admin
 
-Performed review and documented remediation.
+Performed an access review and documented remediation.
 
-### Findings
+## Findings
 
-Unauthorized HR Membership
+- Unauthorized HR Membership
+- Excessive Administrative Privileges
+- Improper Finance Access
 
-Excessive Administrative Privileges
+## Evidence
 
-Improper Finance Access
+![Reception in HR Misconfiguration](Screenshots/reception%20in%20HR%20misconfig.PNG)
 
-### Evidence
+![Finance Group Misconfiguration](Screenshots/doc%20in%20finance%20group%20misconfig.PNG)
 
-`/Screenshots/reception in HR misconfig.png`
-
-`/Screenshots/doc in finance group misconfig.png`
-
-`/Screenshots/Super admin misconfig.png`
+![Super Admin Misconfiguration](Screenshots/Super%20admin%20misconfig.PNG)
 
 ---
 
@@ -190,15 +191,15 @@ Implemented enterprise authentication controls.
 
 Configured:
 
-- Multi-Factor Authentication
+- Multi-Factor Authentication (MFA)
 - Password Policies
 - Administrative Roles
 
-### Evidence
+## Evidence
 
-`/Screenshots/MFA enablement.png`
+![MFA Enablement](Screenshots/MFA%20enablement.PNG)
 
-`/Screenshots/Password management.png`
+![Password Management](Screenshots/Password%20management.PNG)
 
 ---
 
@@ -210,13 +211,13 @@ Restricted sharing using organizational policies.
 
 Validated access restrictions by testing user permissions.
 
-Attempted external sharing and confirmed policy enforcement prevented data exposure.
+Attempted external sharing and confirmed policy enforcement prevented unauthorized data exposure.
 
-### Evidence
+## Evidence
 
-`/Screenshots/cant share (nurse to external).png`
+![External Sharing Blocked](Screenshots/cant%20share(nurse%20to%20external).PNG)
 
-`/Screenshots/EXTERNAL DRIVE SHARING.png`
+![External Drive Sharing Policy](Screenshots/EXTERNAL%20DRIVE%20SHARING.PNG)
 
 ---
 
@@ -235,15 +236,15 @@ Configured Google Workspace to require administrator approval before users could
 
 Validated policy enforcement by confirming application access was denied after policy implementation.
 
-### Evidence
+## Evidence
 
-`/Screenshots/OAuth SmallPDF add-on install permissions request for nurse.png`
+![OAuth Permission Request](Screenshots/OAuth%20SmallPDF%20add-on%20install%20permissions%20request%20for%20nurse.PNG)
 
-`/Screenshots/OAuth Log events showing small pdf and adobe acrobat granted by nurse.png`
+![OAuth Audit Logs](Screenshots/OAuth%20Log%20events%20showing%20small%20pdf%20and%20adobe%20acrobat%20granted%20by%20nurse.PNG)
 
-`/Screenshots/configuring access for third party integration (squarespace login).png`
+![Third-Party Integration Policy](Screenshots/configuring%20access%20for%20third%20party%20integration%20(squarespace%20login).PNG)
 
-`/Screenshots/Access blocked for small pdf for nurse after change.png`
+![Access Blocked After Policy Change](Screenshots/Access%20blocked%20for%20small%20pdf%20for%20nurse%20after%20change.PNG)
 
 ---
 
@@ -253,16 +254,16 @@ Reviewed Gmail security settings and verified protections including:
 
 - External sender warnings
 - Anti-spoofing protections
-- Safe browsing
+- Safe Browsing
 - Spam protections
 
 Validated external email identification using a simulated phishing email.
 
-### Evidence
+## Evidence
 
-`/Screenshots/gmail safety settings.png`
+![Gmail Safety Settings](Screenshots/gmail%20safety%20settings.PNG)
 
-`/Screenshots/external email phishing attempt marked as external.png`
+![External Email Warning](Screenshots/external%20email%20phishing%20attempt%20marked%20as%20external.PNG)
 
 ---
 
@@ -284,61 +285,41 @@ Results:
 - DKIM = PASS
 - DMARC = PASS
 
-### Evidence
+## Evidence
 
-`/Screenshots/showing DNS of DMARC added.png`
+![DMARC DNS Configuration](Screenshots/showing%20DNS%20of%20DMARC%20added.PNG)
 
-`/Screenshots/Squarespace DNS management showing v=SPF and DKIM.png`
+![SPF & DKIM DNS Records](Screenshots/Squarespace%20DNS%20management%20showing%20v=SPF%20and%20DKIM.PNG)
 
-`/Screenshots/Nurse to external SPF PASS.png`
+![SPF PASS](Screenshots/Nurse%20to%20external%20SPF%20PASS.PNG)
 
-`/Screenshots/nurse to external showing spf pass and dmarc pass.png`
+![SPF, DKIM & DMARC PASS](Screenshots/nurse%20to%20external%20showing%20spf%20pass%20and%20dmarc%20pass.PNG)
 
 ---
 
 # Skills Demonstrated
 
-Identity & Access Management (IAM)
-
-Google Workspace Administration
-
-Role-Based Access Control (RBAC)
-
-Least Privilege
-
-Google Groups
-
-Organizational Units
-
-User Provisioning
-
-Joiner-Mover-Leaver Lifecycle
-
-Access Governance
-
-Quarterly Access Reviews
-
-OAuth Governance
-
-Google Workspace Audit Logs
-
-Google Drive Security
-
-Multi-Factor Authentication
-
-Password Policy Administration
-
-Gmail Security
-
-SPF
-
-DKIM
-
-DMARC
-
-DNS Administration
-
-Security Documentation
+- Identity & Access Management (IAM)
+- Google Workspace Administration
+- Role-Based Access Control (RBAC)
+- Least Privilege
+- Google Groups
+- Organizational Units
+- User Provisioning
+- Joiner-Mover-Leaver Lifecycle
+- Access Governance
+- Quarterly Access Reviews
+- OAuth Governance
+- Google Workspace Audit Logs
+- Google Drive Security
+- Multi-Factor Authentication
+- Password Policy Administration
+- Gmail Security
+- SPF
+- DKIM
+- DMARC
+- DNS Administration
+- Security Documentation
 
 ---
 
