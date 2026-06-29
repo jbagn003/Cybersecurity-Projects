@@ -52,7 +52,7 @@ I documented the intended access model as a formal baseline matrix before touchi
 | Finance Drive | R | No | No | RW | R | RW |
 | IT Documentation | No | No | No | No | No | RW |
 
-*(Full baseline with formatting and legend: [`Bagnis_Labs_Q2_2026_Access_Review.xlsx`](./Bagnis_Labs_Q2_2026_Access_Review.xlsx), "Access Baseline" tab)*
+*(Full baseline with formatting and legend: [`Bagnis_Labs_Q2_2026_Access_Review.xlsx`](./Audit%20Report/Bagnis_Labs_Q2_2026_Access_Review.xlsx), "Access Baseline" tab)*
 
 A few deliberate design choices worth calling out:
 - **Clinical has zero access to Finance, and vice versa.** In a real healthcare org this isn't just tidy IAM — it's the kind of boundary HIPAA's access control requirements and general financial-data segregation expect to see.
@@ -114,10 +114,19 @@ I rated the Super Admin finding Critical rather than just High because of blast 
 
 All three findings were remediated in the same review cycle: group memberships were corrected, the Super Admin role was downgraded to standard user, and I reviewed the Workspace admin audit log to confirm no actions were taken during the exposure window.
 
-I documented this as a formal access review artifact rather than just narrating it in prose — **[`Bagnis_Labs_Q2_2026_Access_Review.xlsx`](./Bagnis_Labs_Q2_2026_Access_Review.xlsx)** — with three tabs:
+I documented this as a formal access review artifact rather than just narrating it in prose — **[`Bagnis_Labs_Q2_2026_Access_Review.xlsx`](./Audit%20Report/Bagnis_Labs_Q2_2026_Access_Review.xlsx)** — with three tabs:
 - **Summary** — KPIs (entitlements reviewed, findings, remediation rate, MFA adoption) and an executive summary
 - **Access Baseline** — the approved least-privilege policy matrix
 - **Audit Findings** — finding-by-finding detail: expected vs. observed access, variance, risk rating, remediation action, status, and remediation date
+
+![Access Review Summary Tab](Audit%20Report/summary%20tab%20excel.PNG)
+*Summary tab — KPIs and executive summary, the page I'd lead with if asked to walk through the review.*
+
+![Access Baseline Tab](Audit%20Report/Access%20Baseline%20excel.PNG)
+*Access Baseline tab — the approved least-privilege policy matrix, color-coded by access level (RW / R / No), used as the control every observed permission gets checked against.*
+
+![Audit Findings Tab](Audit%20Report/Audit%20Findings%20Excel.PNG)
+*Audit Findings tab — the three misconfigurations logged as formal findings with expected vs. observed access, risk rating, remediation action, and closure status.*
 
 ![Reception in HR Misconfiguration](Screenshots/reception%20in%20HR%20misconfig.PNG)
 *Google Admin Console showing the Reception-department user as an active member of the HR Google Group — the unauthorized membership flagged as Finding AR-2026Q2-01.*
@@ -219,7 +228,7 @@ Borrowed directly from how this would actually get reported to leadership — th
 | Users with excess privilege post-remediation | 0 | 0 | ✅ Met |
 | Open findings carried to next cycle | 0 | 0 | ✅ Met |
 
-*(Full KPI breakdown: [`Bagnis_Labs_Q2_2026_Access_Review.xlsx`](./Bagnis_Labs_Q2_2026_Access_Review.xlsx), "Summary" tab)*
+*(Full KPI breakdown: [`Bagnis_Labs_Q2_2026_Access_Review.xlsx`](./Audit%20Report/Bagnis_Labs_Q2_2026_Access_Review.xlsx), "Summary" tab)*
 
 ---
 
