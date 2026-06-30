@@ -29,10 +29,10 @@ Built a cloud-based Security Operations Center (SOC) using Microsoft Sentinel an
 ### Enterprise Identity & Access Management Lab
 **Technologies:** Google Workspace • IAM • RBAC • Access Governance
 
-Designed a simulated enterprise identity governance program for a healthcare organization featuring role-based access control, Joiner/Mover/Leaver lifecycle management, quarterly access reviews, OAuth governance, MFA enforcement, Gmail security, and SPF/DKIM/DMARC implementation.
+Designed a simulated enterprise identity governance program for a healthcare organization featuring role based access control, Joiner/Mover/Leaver lifecycle management, quarterly access reviews, OAuth governance, MFA enforcement, Gmail security, and SPF/DKIM/DMARC implementation.
 
 **View Project:**  
-[Enterprise Identity & Access Management Lab | Google Workspace | RBAC | Access Governance](./Enterprise%20Identity%20%26%20Access%20Management%20Lab/)
+[Enterprise Identity & Access Management Lab | Google Workspace | RBAC | Access Auditing](./Enterprise%20Identity%20%26%20Access%20Management%20Lab%20%7C%20Google%20Workspace%20%7C%20RBAC%20%7C%20Access%20Auditing/)
 
 ---
 
