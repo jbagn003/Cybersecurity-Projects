@@ -22,7 +22,7 @@ Designed a home lab to perform vulnerability assessments, validate web applicati
 Built a cloud-based Security Operations Center (SOC) using Microsoft Sentinel and Azure to collect endpoint telemetry, engineer custom KQL detections, map alerts to the MITRE ATT&CK framework, tune alert logic, and investigate simulated security incidents.
 
 **View Project:**  
-[Cloud SOC & Detection Engineering Lab | Microsoft Sentinel | Azure | KQL](./Cloud%20SOC%20%26%20Detection%20Engineering%20Lab/)
+[Cloud SOC & Detection Engineering Lab | Microsoft Sentinel | Azure | KQL](./Cloud%20SOC%20%26%20Detection%20Engineering%20Lab%20—%20Microsoft%20Sentinel%20(SIEM)%20%7C%20Azure%20%7C%20KQL/)
 
 ---
 
